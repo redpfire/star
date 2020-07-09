@@ -54,6 +54,7 @@ client.on('messageReactionAdd', r => {
         .addField('Channel', r.message.channel.toString(), true)
         .addField('Source', url, true)
         .setFooter('⭐ '+r.count+' stars')
+        .setColor(0xfaa61a)
         .setTimestamp();
 
     if (msg === undefined) {
@@ -79,6 +80,7 @@ client.on('messageReactionRemove', r => {
             .addField('Channel', r.message.channel.toString(), true)
             .addField('Source', url, true)
             .setFooter('⭐ '+r.count+' stars')
+            .setColor(0xfaa61a)
             .setTimestamp();
 
         if (msg !== undefined) {
