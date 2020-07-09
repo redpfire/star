@@ -46,6 +46,8 @@ client.on('message', msg => {
 });
 
 client.on('messageReactionAdd', r => {
+    if (r.emoji.name !== '⭐') return;
+
     const msg = msgs.find(k => k.is_id(r.message.id));
     const url = '[Jump!]('+r.message.url+')';
     const embed = new MessageEmbed()
@@ -71,6 +73,7 @@ client.on('messageReactionAdd', r => {
 });
 
 client.on('messageReactionRemove', r => {
+    if (r.emoji.name !== '⭐') return;
     const msg = msgs.find(k => k.is_id(r.message.id));
     const msgIndex = msgs.findIndex(k => k.is_id(r.message.id));
 
