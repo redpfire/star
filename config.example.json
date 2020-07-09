@@ -1,6 +1,7 @@
 {
   "token": "INSERT TOKEN HERE",
   "guilds": [],
+  "threshold": 3,
   "owners": [
     "OWNERID",
     "OWNERID"
