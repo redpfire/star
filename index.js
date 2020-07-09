@@ -57,7 +57,7 @@ client.on('messageReactionAdd', r => {
         .setColor(0xfaa61a)
         .setTimestamp();
 
-    if (msg === undefined) {
+    if (msg === undefined && r.count > config.threshold) {
         const cfgInfo = config.guilds.find(g => g.guildId === r.message.guild.id);
         if (cfgInfo !== undefined) {
             r.message.guild.channels.resolve(cfgInfo.channelId).send(embed).then(m => {msgs.push(new MyMessage(r.message, m))});
@@ -72,7 +72,7 @@ client.on('messageReactionRemove', r => {
     const msg = msgs.find(k => k.is_id(r.message.id));
     const msgIndex = msgs.findIndex(k => k.is_id(r.message.id));
 
-    if (r.count > 0) {
+    if (r.count > 0 && r.count > config.threshold) {
         const url = '[Jump!]('+r.message.url+')';
         const embed = new MessageEmbed()
             .addField('Content', r.message.content)
