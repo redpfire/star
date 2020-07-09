@@ -50,7 +50,8 @@ client.on('messageReactionAdd', r => {
         .addField('Content', r.message.content)
         .addField('Author', r.message.author.toString(), true)
         .addField('Channel', r.message.channel.toString(), true)
-        .setFooter('⭐ '+r.count+' stars');
+        .setFooter('⭐ '+r.count+' stars')
+        .setTimestamp();
 
     if (msg === undefined) {
         const cfgInfo = config.guilds.find(g => g.guildId === r.message.guild.id);
@@ -73,7 +74,8 @@ client.on('messageReactionRemove', r => {
             .addField('Content', r.message.content)
             .addField('Author', r.message.author.toString(), true)
             .addField('Channel', r.message.channel.toString(), true)
-            .setFooter('⭐ '+r.count+' stars');
+            .setFooter('⭐ '+r.count+' stars')
+            .setTimestamp();
 
         if (msg !== undefined) {
             msg.my.edit(embed);
