@@ -47,10 +47,12 @@ client.on('message', msg => {
 
 client.on('messageReactionAdd', r => {
     const msg = msgs.find(k => k.is_id(r.message.id));
+    const url = '[Jump!]('+r.message.url+')';
     const embed = new MessageEmbed()
         .addField('Content', r.message.content)
         .addField('Author', r.message.author.toString(), true)
         .addField('Channel', r.message.channel.toString(), true)
+        .addField('Source', url, true)
         .setFooter('⭐ '+r.count+' stars')
         .setTimestamp();
 
@@ -59,7 +61,6 @@ client.on('messageReactionAdd', r => {
         if (cfgInfo !== undefined) {
             r.message.guild.channels.resolve(cfgInfo.channelId).send(embed).then(m => {msgs.push(new MyMessage(r.message, m))});
         }
-        //r.message.channel.send(embed).then(m => {msgs.push(new MyMessage(r.message, m))});
     }
     else {
         msg.my.edit(embed);
@@ -71,10 +72,12 @@ client.on('messageReactionRemove', r => {
     const msgIndex = msgs.findIndex(k => k.is_id(r.message.id));
 
     if (r.count > 0) {
+        const url = '[Jump!]('+r.message.url+')';
         const embed = new MessageEmbed()
             .addField('Content', r.message.content)
             .addField('Author', r.message.author.toString(), true)
             .addField('Channel', r.message.channel.toString(), true)
+            .addField('Source', url, true)
             .setFooter('⭐ '+r.count+' stars')
             .setTimestamp();
 
