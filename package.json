@@ -1,0 +1,9 @@
+{
+  "name": "star",
+  "version": "1.0.0",
+  "description": "a discord bot for starring comments",
+  "main": "index.js",
+  "repository": "git@github.com:redpfire/star.git",
+  "author": "redpfire <redpixafire@gmail.com>",
+  "license": "MIT"
+}
