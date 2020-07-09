@@ -22,7 +22,8 @@ client.on('ready', () => {
 });
 
 client.on('message', msg => {
-    if (msg.author.id === config.owner) {
+    const isOwner = config.owners.findIndex(i => i === msg.author.id) > -1;
+    if (isOwner) {
         if (msg.content.startsWith('-setchannel')) {
             const channelId = msg.content.split(' ')[1];
             const cfgInfo = config.guilds.findIndex(g => g.guildId === msg.guild.id);
