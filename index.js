@@ -138,6 +138,10 @@ client.on('messageReactionAdd', r => {
 client.on('messageReactionRemove', r => {
     if (r.emoji.name !== '⭐') return;
 
+    if (r.message.attachments.length > 0) {
+        console.log(r.message.attachments);
+    }
+
     const msg = msgs.find(k => k.is_id(r.message.id));
     if (msg === undefined) return;
 
