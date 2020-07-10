@@ -94,14 +94,20 @@ client.on('message', msg => {
 
 client.on('messageReactionAdd', r => {
     if (r.emoji.name !== '⭐') return;
+
+    if (r.message.attachments.length > 0) {
+        console.log(r.message.attachments);
+    }
+
     if (r.count < config.threshold) return;
     const guildCfg = config.guilds.find(g => g.guildId === r.message.guild.id);
     const _lang = guildCfg !== undefined ? guildCfg.lang : 'en';
 
     const msg = msgs.find(k => k.is_id(r.message.id));
     const url = '[Jump!]('+r.message.url+')';
+    const content = r.message.content ? r.message.content : ' ';
     const embed = new MessageEmbed()
-        .addField(locale.content[_lang], r.message.content)
+        .addField(locale.content[_lang], content)
         .addField(locale.author[_lang], r.message.author, true)
         .addField(locale.channel[_lang], r.message.channel, true)
         .addField(locale.source[_lang], url, true)
@@ -138,20 +144,17 @@ client.on('messageReactionAdd', r => {
 client.on('messageReactionRemove', r => {
     if (r.emoji.name !== '⭐') return;
 
-    if (r.message.attachments.length > 0) {
-        console.log(r.message.attachments);
-    }
-
     const msg = msgs.find(k => k.is_id(r.message.id));
     if (msg === undefined) return;
 
     const guildCfg = config.guilds.find(g => g.guildId === r.message.guild.id);
     const _lang = guildCfg !== undefined ? guildCfg.lang : 'en';
+    const content = r.message.content ? r.message.content : ' ';
 
     if (r.count > 0 && r.count >= config.threshold) {
         const url = '[Jump!]('+r.message.url+')';
         const embed = new MessageEmbed()
-            .addField(locale.content[_lang], r.message.content)
+            .addField(locale.content[_lang], content)
             .addField(locale.author[_lang], r.message.author, true)
             .addField(locale.channel[_lang], r.message.channel, true)
             .addField(locale.source[_lang], url, true)
