@@ -95,10 +95,6 @@ client.on('message', msg => {
 client.on('messageReactionAdd', r => {
     if (r.emoji.name !== '⭐') return;
 
-    if (r.message.attachments.array().length > 0) {
-        console.log(r.message.attachments);
-    }
-
     if (r.count < config.threshold) return;
     const guildCfg = config.guilds.find(g => g.guildId === r.message.guild.id);
     const _lang = guildCfg !== undefined ? guildCfg.lang : 'en';
@@ -106,6 +102,7 @@ client.on('messageReactionAdd', r => {
     const msg = msgs.find(k => k.is_id(r.message.id));
     const url = '[Jump!]('+r.message.url+')';
     const content = r.message.content ? r.message.content : ' ';
+    const attachments = r.message.attachments.array();
     const embed = new MessageEmbed()
         .addField(locale.content[_lang], content)
         .addField(locale.author[_lang], r.message.author, true)
@@ -121,7 +118,7 @@ client.on('messageReactionAdd', r => {
 
         if (!r.message.channel.nsfw) {
             r.message.guild.channels.resolve(guildCfg.channelId)
-                .send(embed)
+                .send(embed, attachments)
                 .then(m => {
                     msgs.push(new MessageWrapper(r.message, m));
                 });
@@ -130,7 +127,7 @@ client.on('messageReactionAdd', r => {
             if (guildCfg.nsfwId === undefined) return;
 
             r.message.guild.channels.resolve(guildCfg.nsfwId)
-                .send(embed)
+                .send(embed, attachments)
                 .then(m => {
                     msgs.push(new MessageWrapper(r.message, m));
                 });
