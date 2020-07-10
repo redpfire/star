@@ -34,7 +34,7 @@ client.on('message', msg => {
     const guildCfg = config.guilds.find(g => g.guildId === msg.guild.id);
 
     switch (args[0]) {
-        case '-setchannel':
+        case config.prompt+'setchannel':
             const channelId = args[1];
 
             let g = guildCfg !== undefined ? guildCfg : {};
@@ -57,7 +57,7 @@ client.on('message', msg => {
             msg.channel.send(locale.channelSet[g.lang]);
             break;
 
-        case '-setnsfw':
+        case config.prompt+'setnsfw':
             const nsfwId = args[1];
             if (guildCfg === undefined) {
                 msg.channel.send(locale.needGuildCfg);
@@ -70,7 +70,7 @@ client.on('message', msg => {
             msg.channel.send(locale.nsfwSet[guildCfg.lang]);
             break;
 
-        case '-setlang':
+        case config.prompt+'setlang':
             const lang = args[1].toLowerCase();
             if (locale.langs.findIndex(l => l === lang) == -1) return;
             if (guildCfg === undefined) {
@@ -84,7 +84,7 @@ client.on('message', msg => {
             msg.channel.send(locale.langSet[guildCfg.lang]);
             break;
 
-        case '-help':
+        case config.prompt+'help':
             const _lang = guildCfg === undefined ? 'en' : guildCfg.lang;
 
             msg.channel.send(locale.help[_lang]);
