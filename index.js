@@ -101,8 +101,10 @@ client.on('messageReactionAdd', r => {
 
     const msg = msgs.find(k => k.is_id(r.message.id));
     const url = '[Jump!]('+r.message.url+')';
-    const content = r.message.content ? r.message.content : ' ';
+    const content = r.message.content ? r.message.content : '-';
     const attachments = r.message.attachments.array();
+    const firstUrl = attachments.length > 0 ? attachments[0].url : undefined;
+
     const embed = new MessageEmbed()
         .addField(locale.content[_lang], content)
         .addField(locale.author[_lang], r.message.author, true)
@@ -110,6 +112,7 @@ client.on('messageReactionAdd', r => {
         .addField(locale.source[_lang], url, true)
         .setFooter('⭐ '+r.count+' '+locale.stars[_lang])
         .setColor(0xfaa61a)
+        .setImage(firstUrl)
         .setTimestamp();
 
     if (msg === undefined) {
@@ -118,7 +121,7 @@ client.on('messageReactionAdd', r => {
 
         if (!r.message.channel.nsfw) {
             r.message.guild.channels.resolve(guildCfg.channelId)
-                .send(embed, attachments)
+                .send(embed)
                 .then(m => {
                     msgs.push(new MessageWrapper(r.message, m));
                 });
@@ -127,7 +130,7 @@ client.on('messageReactionAdd', r => {
             if (guildCfg.nsfwId === undefined) return;
 
             r.message.guild.channels.resolve(guildCfg.nsfwId)
-                .send(embed, attachments)
+                .send(embed)
                 .then(m => {
                     msgs.push(new MessageWrapper(r.message, m));
                 });
@@ -146,7 +149,9 @@ client.on('messageReactionRemove', r => {
 
     const guildCfg = config.guilds.find(g => g.guildId === r.message.guild.id);
     const _lang = guildCfg !== undefined ? guildCfg.lang : 'en';
-    const content = r.message.content ? r.message.content : ' ';
+    const content = r.message.content ? r.message.content : '-';
+    const attachments = r.message.attachments.array();
+    const firstUrl = attachments.length > 0 ? attachments[0].url : undefined;
 
     if (r.count > 0 && r.count >= config.threshold) {
         const url = '[Jump!]('+r.message.url+')';
@@ -156,6 +161,7 @@ client.on('messageReactionRemove', r => {
             .addField(locale.channel[_lang], r.message.channel, true)
             .addField(locale.source[_lang], url, true)
             .setFooter('⭐ '+r.count+' '+locale.stars[_lang])
+            .setImage(firstUrl)
             .setColor(0xfaa61a)
             .setTimestamp();
 
