@@ -2,6 +2,7 @@
   "token": "INSERT TOKEN HERE",
   "guilds": [],
   "threshold": 3,
+  "defaultLang": "en",
   "owners": [
     "OWNERID",
     "OWNERID"

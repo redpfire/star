@@ -45,7 +45,7 @@ client.on('message', msg => {
             }
             else {
                 g.guildId = msg.guild.id;
-                g.lang = 'en';
+                g.lang = config.defaultLang;
             }
 
             g.channelId = channelId;
