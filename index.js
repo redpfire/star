@@ -3,6 +3,7 @@
 const {Client, MessageEmbed, Message} = require('discord.js');
 const client = new Client();
 const config = require('./config.json');
+const locale = require('./locale.json');
 
 class MessageWrapper {
     constructor(orig, my) {
@@ -25,46 +26,82 @@ client.on('message', msg => {
     const isOwner = config.owners.findIndex(i => i === msg.author.id) > -1;
     if (!isOwner) return;
 
-    if (msg.content.startsWith('-setchannel')) {
-        const channelId = msg.content.split(' ')[1];
-        const cfgInfo = config.guilds.findIndex(g => g.guildId === msg.guild.id);
+    const rewriteConfig = () => {
+        require('fs').writeFile('config.json', JSON.stringify(config, null, 2), err => console.err);
+    };
 
-        if (cfgInfo !== -1) {
-            config.guilds.splice(cfgInfo, 1);
-        }
+    const args = msg.content.split(' ');
+    const guildCfg = config.guilds.find(g => g.guildId === msg.guild.id);
 
-        let g = {};
-        g.guildId = msg.guild.id;
-        g.channelId = channelId;
+    switch (args[0]) {
+        case '-setchannel':
+            const channelId = args[1];
 
-        config.guilds.push(g);
+            let g = guildCfg !== undefined ? guildCfg : {};
 
-        require('fs').writeFile('config.json', JSON.stringify(config, null, 2), err => console.log);
+            if (guildCfg !== undefined) {
+                const index = config.guilds.findIndex(g => g.guildId === msg.guild.id);
+                config.guilds.splice(index, 1);
+            }
+            else {
+                g.guildId = msg.guild.id;
+                g.lang = 'en';
+            }
 
-        msg.channel.send(':ok_hand:');
+            g.channelId = channelId;
+
+            config.guilds.push(g);
+
+            rewriteConfig();
+
+            msg.channel.send(locale.channelSet[guildCfg.lang]);
+            break;
+
+        case '-setlang':
+            const lang = args[1].toLowerCase();
+            if (locale.langs.findIndex(l => l === lang) == -1) return;
+            if (guildCfg === undefined) {
+                msg.channel.send(locale.needGuildCfg);
+                return;
+            }
+            
+            guildCfg.lang = lang;
+            rewriteConfig();
+
+            msg.channel.send(locale.langSet[guildCfg.lang]);
+            break;
+
+        default:
+        case '-help':
+            const _lang = guildCfg === undefined ? 'en' : guildCfg.lang;
+
+            msg.channel.send(locale.help[_lang]);
+            break;
     }
 });
 
 client.on('messageReactionAdd', r => {
     if (r.emoji.name !== '⭐') return;
     if (r.count < config.threshold) return;
+    const guildCfg = config.guilds.find(g => g.guildId === r.message.guild.id);
+    const _lang = guildCfg !== undefined ? guildCfg.lang : 'en';
 
     const msg = msgs.find(k => k.is_id(r.message.id));
     const url = '[Jump!]('+r.message.url+')';
     const embed = new MessageEmbed()
-        .addField('Content', r.message.content)
-        .addField('Author', r.message.author, true)
-        .addField('Channel', r.message.channel, true)
-        .addField('Source', url, true)
-        .setFooter('⭐ '+r.count+' stars')
+        .addField(lang.content[_lang], r.message.content)
+        .addField(lang.author[_lang], r.message.author, true)
+        .addField(lang.channel[_lang], r.message.channel, true)
+        .addField(lang.source[_lang], url, true)
+        .setFooter('⭐ '+r.count+' '+lang.stars[_lang])
         .setColor(0xfaa61a)
         .setTimestamp();
 
     if (msg === undefined) {
-        const cfgInfo = config.guilds.find(g => g.guildId === r.message.guild.id);
-        if (cfgInfo === undefined) return;
+        const guildCfg = config.guilds.find(g => g.guildId === r.message.guild.id);
+        if (guildCfg === undefined) return;
 
-        r.message.guild.channels.resolve(cfgInfo.channelId)
+        r.message.guild.channels.resolve(guildCfg.channelId)
             .send(embed)
             .then(m => {
                 msgs.push(new MessageWrapper(r.message, m));
@@ -81,14 +118,17 @@ client.on('messageReactionRemove', r => {
     const msg = msgs.find(k => k.is_id(r.message.id));
     if (msg === undefined) return;
 
+    const guildCfg = config.guilds.find(g => g.guildId === r.message.guild.id);
+    const _lang = guildCfg !== undefined ? guildCfg.lang : 'en';
+
     if (r.count > 0 && r.count >= config.threshold) {
         const url = '[Jump!]('+r.message.url+')';
         const embed = new MessageEmbed()
-            .addField('Content', r.message.content)
-            .addField('Author', r.message.author, true)
-            .addField('Channel', r.message.channel, true)
-            .addField('Source', url, true)
-            .setFooter('⭐ '+r.count+' stars')
+            .addField(lang.content[_lang], r.message.content)
+            .addField(lang.author[_lang], r.message.author, true)
+            .addField(lang.channel[_lang], r.message.channel, true)
+            .addField(lang.source[_lang], url, true)
+            .setFooter('⭐ '+r.count+' '+lang.stars[_lang])
             .setColor(0xfaa61a)
             .setTimestamp();
 
