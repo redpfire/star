@@ -54,7 +54,7 @@ client.on('message', msg => {
 
             rewriteConfig();
 
-            msg.channel.send(locale.channelSet[guildCfg.lang]);
+            msg.channel.send(locale.channelSet[g.lang]);
             break;
 
         case '-setlang':
@@ -88,11 +88,11 @@ client.on('messageReactionAdd', r => {
     const msg = msgs.find(k => k.is_id(r.message.id));
     const url = '[Jump!]('+r.message.url+')';
     const embed = new MessageEmbed()
-        .addField(lang.content[_lang], r.message.content)
-        .addField(lang.author[_lang], r.message.author, true)
-        .addField(lang.channel[_lang], r.message.channel, true)
-        .addField(lang.source[_lang], url, true)
-        .setFooter('⭐ '+r.count+' '+lang.stars[_lang])
+        .addField(locale.content[_lang], r.message.content)
+        .addField(locale.author[_lang], r.message.author, true)
+        .addField(locale.channel[_lang], r.message.channel, true)
+        .addField(locale.source[_lang], url, true)
+        .setFooter('⭐ '+r.count+' '+locale.stars[_lang])
         .setColor(0xfaa61a)
         .setTimestamp();
 
@@ -123,11 +123,11 @@ client.on('messageReactionRemove', r => {
     if (r.count > 0 && r.count >= config.threshold) {
         const url = '[Jump!]('+r.message.url+')';
         const embed = new MessageEmbed()
-            .addField(lang.content[_lang], r.message.content)
-            .addField(lang.author[_lang], r.message.author, true)
-            .addField(lang.channel[_lang], r.message.channel, true)
-            .addField(lang.source[_lang], url, true)
-            .setFooter('⭐ '+r.count+' '+lang.stars[_lang])
+            .addField(locale.content[_lang], r.message.content)
+            .addField(locale.author[_lang], r.message.author, true)
+            .addField(locale.channel[_lang], r.message.channel, true)
+            .addField(locale.source[_lang], url, true)
+            .setFooter('⭐ '+r.count+' '+locale.stars[_lang])
             .setColor(0xfaa61a)
             .setTimestamp();
 
