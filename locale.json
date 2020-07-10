@@ -1,7 +1,7 @@
 {
     "langs": [ "en", "pl" ],
 
-    "needGuildCfg": "Set a channel before you do that",
+    "needGuildCfg": "Set a channel before you do that.",
     "channelSet": {
         "en": "Channel set.",
         "pl": "Kanał ustawiony."
@@ -10,9 +10,13 @@
         "en": "Language set to English.",
         "pl": "Język ustawiony na Polski."
     },
+    "nsfwSet": {
+        "en": "NSFW channel set.",
+        "pl": "Kanał NSFW ustawiony."
+    },
     "help": {
-        "en": "Star reaction bot\nv1.0.0\n\n`-setchannel <channelId>` - sets pin channel for this guild\n`-setlang <lang>` - sets language for this guild\n`-help` - displays this message",
-        "pl": "Star reaction bot\nv1.0.0\n\n`-setchannel <channelId>` - ustawia kanał dla pinów dla tego serwera\n`-setlang <lang>` - ustawia język dla tego serwera\n`-help` - wyświetla pomoc"
+        "en": "Star reaction bot\nv1.0.0\n\n`-setchannel <channelId>` - sets pin channel for this guild\n`-setnsfw <channelId>` - sets nsfw channel\n`-setlang <lang>` - sets language for this guild\n`-help` - displays this message",
+        "pl": "Star reaction bot\nv1.0.0\n\n`-setchannel <channelId>` - ustawia kanał dla pinów dla tego serwera\n`-setnsfw <channelId>` - ustawia kanał nsfw dla tego serwera\n`-setlang <lang>` - ustawia język dla tego serwera\n`-help` - wyświetla pomoc"
     },
 
     "content": {

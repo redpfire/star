@@ -57,6 +57,19 @@ client.on('message', msg => {
             msg.channel.send(locale.channelSet[g.lang]);
             break;
 
+        case '-setnsfw':
+            const nsfwId = args[1];
+            if (guildCfg === undefined) {
+                msg.channel.send(locale.needGuildCfg);
+                return;
+            }
+
+            guildCfg.nsfwId = nsfwId;
+            rewriteConfig();
+
+            msg.channel.send(locale.nsfwSet[guildCfg.lang]);
+            break;
+
         case '-setlang':
             const lang = args[1].toLowerCase();
             if (locale.langs.findIndex(l => l === lang) == -1) return;
@@ -100,11 +113,22 @@ client.on('messageReactionAdd', r => {
         const guildCfg = config.guilds.find(g => g.guildId === r.message.guild.id);
         if (guildCfg === undefined) return;
 
-        r.message.guild.channels.resolve(guildCfg.channelId)
-            .send(embed)
-            .then(m => {
-                msgs.push(new MessageWrapper(r.message, m));
-            });
+        if (!r.message.channel.nsfw) {
+            r.message.guild.channels.resolve(guildCfg.channelId)
+                .send(embed)
+                .then(m => {
+                    msgs.push(new MessageWrapper(r.message, m));
+                });
+        }
+        else {
+            if (guildCfg.nsfwId === undefined) return;
+
+            r.message.guild.channels.resolve(guildCfg.nsfwId)
+                .send(embed)
+                .then(m => {
+                    msgs.push(new MessageWrapper(r.message, m));
+                });
+        }
     }
     else {
         msg.my.edit(embed);
