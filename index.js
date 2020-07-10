@@ -71,7 +71,6 @@ client.on('message', msg => {
             msg.channel.send(locale.langSet[guildCfg.lang]);
             break;
 
-        default:
         case '-help':
             const _lang = guildCfg === undefined ? 'en' : guildCfg.lang;
 
