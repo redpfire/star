@@ -95,7 +95,7 @@ client.on('message', msg => {
 client.on('messageReactionAdd', r => {
     if (r.emoji.name !== '⭐') return;
 
-    if (r.message.attachments.length > 0) {
+    if (r.message.attachments.array().length > 0) {
         console.log(r.message.attachments);
     }
 
